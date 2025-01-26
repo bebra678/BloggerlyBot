@@ -20,27 +20,36 @@ class TelegramController extends Controller
         $update = $this->telegram->getWebhookUpdate();
         $chatId = $update->getMessage()->getChat()->getId();
         $messageText = $update->getMessage()->getText();
-        //$fileId = $update->getMessage()->getDocument()->getFileId();
-        //$fileSize = $update->getMessage()->getDocument()->getFileSize();
+        $file = $update->getMessage()->getDocument();
+
+        $user = User::firstOrCreate(['telegram_id' => $chatId]);
 
         if ($messageText) {
+            $user->increment('clicks');
+            $user->save();
+
+            $replyMarkup = json_encode([
+                'inline_keyboard' => [
+                    [
+                        [['text' => 'Количество нажатий', 'callback_data' => 'get_clicks']]
+                    ]
+                ]
+            ]);
+
             $this->telegram->sendMessage([
                 'chat_id' => $chatId,
                 'text' => "Ваш ID: $chatId\nВаше сообщение: $messageText",
-                'reply_markup' => json_encode([
-                    'inline_keyboard' => [
-                        [
-                            [['text' => 'Количество кликов', 'callback_data' => 'get_clicks']]
-                        ]
-                    ]
-                ])
+                'reply_markup' => $replyMarkup
             ]);
         }
 
-        if ($fileId) {
+        if ($file) {
+            $fileName = $file->getFileName();
+            $fileSize = $file->getFileSize();
+
             $this->telegram->sendMessage([
                 'chat_id' => $chatId,
-                'text' => "Имя файла: {$update->getMessage()->getDocument()->getFileName()}\nРазмер файла: $fileSize байт"
+                'text' => "Имя файла: $fileName\nРазмер файла: $fileSize байт"
             ]);
         }
 
