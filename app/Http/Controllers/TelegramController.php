@@ -21,7 +21,7 @@ class TelegramController extends Controller
         $chatId = $update->getMessage()->getChat()->getId();
         $messageText = $update->getMessage()->getText();
         //$fileId = $update->getMessage()->getDocument()->getFileId();
-        $fileSize = $update->getMessage()->getDocument()->getFileSize();
+        //$fileSize = $update->getMessage()->getDocument()->getFileSize();
 
         if ($messageText) {
             $this->telegram->sendMessage([
