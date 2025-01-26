@@ -20,7 +20,7 @@ class TelegramController extends Controller
         $update = $this->telegram->getWebhookUpdate();
         $chatId = $update->getMessage()->getChat()->getId();
         $messageText = $update->getMessage()->getText();
-        $fileId = $update->getMessage()->getDocument()->getFileId();
+        //$fileId = $update->getMessage()->getDocument()->getFileId();
         $fileSize = $update->getMessage()->getDocument()->getFileSize();
 
         if ($messageText) {
