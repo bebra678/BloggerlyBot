@@ -26,6 +26,13 @@ class TelegramController extends Controller
         $file = $update->getMessage()->getDocument();
         $photo = $update->getMessage()->getPhoto();
 
+        $user = User::firstOrCreate(['telegram_id' => $userId, 'name' => $username]);
+        if($user->status = 'kicked')
+        {
+            $user->status = 'active';
+            $user->save();
+        }
+
         if ($file) {
             $this->handleFileMessage($chatId, $file);
         }
@@ -33,13 +40,13 @@ class TelegramController extends Controller
             $this->handlePhotoMessage($chatId, $photo);
         }
         else {
-            $this->handleTextMessage($chatId, $userId, $text, $username);
+            $this->handleTextMessage($chatId, $userId, $text, $username, $user);
         }
     }
 
-    protected function handleTextMessage($chatId, $userId, $text, $username)
+    protected function handleTextMessage($chatId, $userId, $text, $username, $user)
     {
-        $user = User::firstOrCreate(['telegram_id' => $userId, 'name' => $username]);
+//        $user = User::firstOrCreate(['telegram_id' => $userId, 'name' => $username]);
 
         if ($text === 'Сколько нажатий?') {
             $user->increment('clicks');
