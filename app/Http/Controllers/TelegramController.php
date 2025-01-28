@@ -111,5 +111,7 @@ class TelegramController extends Controller
                 'text' => $message,
             ]);
         }
+
+        return redirect()->back()->with('success', 'Сообщения успешно отправлены!');
     }
 }
