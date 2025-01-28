@@ -95,7 +95,7 @@ class TelegramController extends Controller
 
             $this->telegram->sendMessage([
                 'chat_id' => $request->input('chat_id'),
-                'text' => "Общее количество нажатий: " . $user->button_clicks,
+                'text' => "Общее количество нажатий: " . $user->clicks,
             ]);
         }
     }
