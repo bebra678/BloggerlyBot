@@ -83,11 +83,24 @@ class TelegramController extends Controller
         ]);
     }
 
+//    protected function handlePhotoMessage($chatId, $photo)
+//    {
+//        $this->telegram->sendMessage([
+//            'chat_id' => $chatId,
+//            'text' => "Получено изображение",
+//        ]);
+//    }
+
     protected function handlePhotoMessage($chatId, $photo)
     {
+        $photoSize = end($photo);
+
+        $fileId = $photoSize->file_id;
+        $file = $this->telegram->getFile(['file_id' => $fileId]);
+
         $this->telegram->sendMessage([
             'chat_id' => $chatId,
-            'text' => "Получено изображение",
+            'text' => "Имя фотографии: $file->file_path\nРазмер фотографии: $photoSize->file_size байт",
         ]);
     }
 
