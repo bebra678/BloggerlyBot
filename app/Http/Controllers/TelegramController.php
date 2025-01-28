@@ -84,32 +84,23 @@ class TelegramController extends Controller
         ]);
     }
 
-    public function buttonClick(Request $request)
-    {
-        $userId = $request->input('user_id');
-        $user = User::where('telegram_id', $userId)->first();
-
-        if ($user) {
-            $user->clicks += 1;
-            $user->save();
-
-            $this->telegram->sendMessage([
-                'chat_id' => $request->input('chat_id'),
-                'text' => "Общее количество нажатий: " . $user->clicks,
-            ]);
-        }
-    }
-
     public function sendBroadcast(Request $request)
     {
         $message = $request->input('message');
         $users = User::all();
 
         foreach ($users as $user) {
-            $this->telegram->sendMessage([
-                'chat_id' => $user->telegram_id,
-                'text' => $message,
-            ]);
+            try {
+                $this->telegram->sendMessage([
+                    'chat_id' => $user->telegram_id,
+                    'text' => $message,
+                ]);
+            } catch (\Telegram\Bot\Exceptions\TelegramResponseException $e) {
+                if ($e->getMessage() === 'Forbidden: bot was blocked by the user') {
+                    $user->status = 'kicked';
+                    $user->save();
+                }
+            }
         }
 
         return redirect()->back()->with('success', 'Сообщения успешно отправлены!');

@@ -34,7 +34,7 @@ class Users extends Section implements Initializable
     /**
      * @var string
      */
-    protected $title;
+    protected $title = 'Пользователи';
 
     /**
      * @var string
@@ -58,10 +58,12 @@ class Users extends Section implements Initializable
     public function onDisplay($payload = [])
     {
         $columns = [
-            AdminColumn::text('id', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
-            AdminColumn::text('telegram_id', 'Telegram ID'),
-            AdminColumn::text('name', 'Имя'),
-            AdminColumn::text('clicks', 'Клики'),
+            //AdminColumn::text('id', '#')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('id', 'ID')->setWidth('50px')->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('telegram_id', 'Telegram ID')->setWidth('500px')->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('name', 'Имя')->setWidth('500px')->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('clicks', 'Клики')->setWidth('500px')->setHtmlAttribute('class', 'text-center'),
+            AdminColumn::text('status', 'Статус')->setWidth('300px')->setHtmlAttribute('class', 'text-center'),
 
 //            AdminColumn::link('name', 'Name', 'created_at')
 //                ->setSearchCallback(function($column, $query, $search){
@@ -116,34 +118,6 @@ class Users extends Section implements Initializable
      *
      * @return FormInterface
      */
-    public function onEdit($id = null, $payload = [])
-    {
-        $form = AdminForm::card()->addBody([
-            AdminFormElement::columns()->addColumn([
-                AdminFormElement::text('name', 'Name')
-                    ->required()
-                ,
-                AdminFormElement::html('<hr>'),
-                AdminFormElement::datetime('created_at')
-                    ->setVisible(true)
-                    ->setReadonly(false)
-                ,
-                AdminFormElement::html('last AdminFormElement without comma')
-            ], 'col-xs-12 col-sm-6 col-md-4 col-lg-4')->addColumn([
-                AdminFormElement::text('id', 'ID')->setReadonly(true),
-                AdminFormElement::html('last AdminFormElement without comma')
-            ], 'col-xs-12 col-sm-6 col-md-8 col-lg-8'),
-        ]);
-
-        $form->getButtons()->setButtons([
-            'save'  => new Save(),
-            'save_and_close'  => new SaveAndClose(),
-            'save_and_create'  => new SaveAndCreate(),
-            'cancel'  => (new Cancel()),
-        ]);
-
-        return $form;
-    }
 
     /**
      * @return FormInterface
