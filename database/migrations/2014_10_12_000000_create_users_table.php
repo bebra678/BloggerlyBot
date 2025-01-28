@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('telegram_id')->unique();
+            $table->string('name');
             $table->integer('clicks')->default(0);
             $table->string('status')->default('active');
             $table->timestamps();

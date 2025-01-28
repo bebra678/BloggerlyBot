@@ -15,6 +15,7 @@ class User extends Authenticatable
         'telegram_id',
         'clicks',
         'status',
+        'name',
     ];
 
 }
